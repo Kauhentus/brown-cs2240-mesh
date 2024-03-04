@@ -46,7 +46,7 @@ const halfedge_mesh_remesh_helper = (mesh: HalfedgeMesh, w: number) => {
         let A = he.vert, B = he.twin.vert;
         let length = distance_v(A, B);
         
-        if(length < 3/5 * mean_edge_length){ // should be 4/5
+        if(length < 4/5 * mean_edge_length){ // should be 4/5
             let event = halfedge_mesh_edge_collapse(mesh, he, false);
             he.flag1 = true;
             he.twin.flag1 = true;

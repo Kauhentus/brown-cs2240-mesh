@@ -15,17 +15,18 @@ export const init_three = () => {
     // camera.position.set(0, 0.5, -2);
     // camera.lookAt(new THREE.Vector3(0, 0, 0));
     camera.position.set(13, 9, -1);
-    camera.lookAt(new THREE.Vector3(14, 9, -1))
+    // camera.position.set(0, 125, -1);
+    // camera.position.set(0, 185, -40);
     const renderer = new THREE.WebGLRenderer({
         canvas: mainCanvas,
-        antialias: true,
-    
+        antialias: true
     });
     renderer.setPixelRatio(1.5);
     renderer.setClearColor(0xffffff);
     renderer.setSize(screenDimension[0], screenDimension[1]);
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.target.set(12, 9, -1);
+    // controls.target.set(0, -1, 10);
     controls.update();
     
     const light_1 = new THREE.DirectionalLight(0xffffff);

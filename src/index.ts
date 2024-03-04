@@ -22,15 +22,23 @@ import { decimate } from "./geo/halfedge_mesh_decimate";
 import { halfedge_mesh_add_noise } from "./geo/halfedge_mesh_add_noise";
 import { halfedge_mesh_denoise } from "./geo/halfedge_mesh_denoise";
 import { halfedge_mesh_remesh } from "./geo/halfedge_mesh_remesh";
+import { download_obj } from "./util/download_obj";
 
 init_three();
 
 // load_file('/template_inis/final/subdivide_icosahedron_4.ini').then(async (ini_raw_data) => {
-// load_file('/template_inis/final/simplify_cow.ini').then(async (ini_raw_data) => {
+load_file('/template_inis/final/simplify_cow.ini').then(async (ini_raw_data) => {
 // load_file('/template_inis/final/simplify_sphere_full.ini').then(async (ini_raw_data) => {
 // load_file('/template_inis/final/filter_peter.ini').then(async (ini_raw_data) => {
-    load_file('/template_inis/final/remesh_peter.ini').then(async (ini_raw_data) => {
-    reset_elapsed_time();
+// load_file('/template_inis/final/filter_peter_noisy.ini').then(async (ini_raw_data) => {
+// load_file('/template_inis/final/filter_cow_noisy.ini').then(async (ini_raw_data) => {
+// load_file('/template_inis/final/remesh_cow_fine.ini').then(async (ini_raw_data) => {
+// load_file('/template_inis/final/remesh_peter.ini').then(async (ini_raw_data) => {
+// load_file('/template_inis/final/view_peter_noisy.ini').then(async (ini_raw_data) => {
+// load_file('/template_inis/final/view_cow_fine.ini').then(async (ini_raw_data) => {
+// load_file('/template_inis/final/view_cow_noisy.ini').then(async (ini_raw_data) => {
+// load_file('/template_inis/final/view_peter.ini').then(async (ini_raw_data) => {
+        reset_elapsed_time();
     const ini_file = parse_ini_file(ini_raw_data);
     const data = ini_file_to_ini_scene(ini_file);
     const obj_raw_data = await load_file(data.IO.infile);
@@ -40,6 +48,10 @@ init_three();
     console.log(`Loaded 3D model in ${get_elapsed_time()} ms`);
 
     if(true){
+        if(data.Method.method === 'none'){
+            // do nothing!
+        }
+
         if(data.Method.method === 'simplify'){
             decimate(mesh, mesh.faces.length - data.Parameters.args1);
         }
@@ -59,32 +71,30 @@ init_three();
     } 
     
     else {
+        // halfedge_mesh_edge_flip(mesh, mesh.halfedges[0], false);   
+        // mesh.cull_old_elements();
+        // mesh.reset_halfedge_flags(); 
+        // halfedge_mesh_edge_split(mesh, mesh.halfedges[0]);
+        // mesh.cull_old_elements();
+        // mesh.reset_halfedge_flags();
+        // halfedge_mesh_edge_collapse(mesh, mesh.halfedges[0], false);
+        // mesh.cull_old_elements();
+        // mesh.reset_halfedge_flags();
 
+        // decimate(mesh, 5802 - 5204);
+        // loop_subdivision(mesh, 2);
+        // decimate(mesh, 4);
+
+        // loop_subdivision(mesh, 1);
+        // let f = 1.5;
+        // halfedge_mesh_add_noise(mesh, 0.1 * f);
+        // halfedge_mesh_denoise(mesh, 0.5 * f, 0.25 * f, 0.1 * f);
+
+        loop_subdivision(mesh, 1);
+        // halfedge_mesh_remesh(mesh, 2, 0.5);
     } 
 
-    // halfedge_mesh_edge_flip(mesh, mesh.halfedges[0], false);   
-    // mesh.cull_old_elements();
-    // mesh.reset_halfedge_flags(); 
-    // halfedge_mesh_edge_split(mesh, mesh.halfedges[0]);
-    // mesh.cull_old_elements();
-    // mesh.reset_halfedge_flags();
-    // halfedge_mesh_edge_collapse(mesh, mesh.halfedges[0], false);
-    // mesh.cull_old_elements();
-    // mesh.reset_halfedge_flags();
-
-    // decimate(mesh, 5802 - 5204);
-    // loop_subdivision(mesh, 2);
-    // decimate(mesh, 4);
-
-    // loop_subdivision(mesh, 1);
-    // halfedge_mesh_add_noise(mesh, 0.1);
-    // halfedge_mesh_add_noise(mesh, 0.1 * 2);
-    // halfedge_mesh_denoise(mesh, 0.5 * 2, 0.25 * 2, 0.1 * 2);
-
-    // halfedge_mesh_remesh(mesh, 2, 0.5);
-
     console.log("finished with", mesh.faces.length, "faces")
-
     console.log(`Processed in ${get_elapsed_time(true)} ms`);
 
     halfedge_mesh_validate(mesh);
@@ -95,4 +105,6 @@ init_three();
 
     view_index_triangle(re_convert, 0x00aaff);
     // view_index_triangle_wireframe(re_convert, 0x00aaff);
+
+    // download_obj(re_convert);
 });
