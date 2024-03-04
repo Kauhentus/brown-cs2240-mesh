@@ -2,9 +2,9 @@ import { cycle_list_reverse } from "../util/array";
 import { Halfedge } from "./atom_halfedge";
 import { Vertex } from "./atom_vertex";
 import { HalfedgeMesh } from "./halfedge_mesh";
-import { halfedge_mesh_flip_edge } from "./halfedge_mesh_flip_edge";
-import { vertex_get_neighbors } from "./halfedge_mesh_get_vert_neighbors";
-import { halfedge_mesh_edge_split } from "./halfedge_mesh_split_edge";
+import { halfedge_mesh_edge_flip } from "./halfedge_mesh_edge_flip";
+import { vertex_get_neighbors } from "./vertex_get_neighbors";
+import { halfedge_mesh_edge_split } from "./halfedge_mesh_edge_split";
 import { add_vs, smul_v } from "./linalg_standard";
 
 export const loop_subdivision = (mesh: HalfedgeMesh, iterations: number) => {
@@ -41,7 +41,11 @@ const loop_subdivision_helper = (mesh: HalfedgeMesh) => {
         if(!he.flag2) return;
 
         if(he.vert.flag1 != he.next.vert.flag1){
-            halfedge_mesh_flip_edge(mesh, he);
+            // doesn't need to check because by our splitting scheme, every vertex has 6 neighbors, 
+            // let result = halfedge_mesh_flip_edge(mesh, he, true);
+            // if(result.failed) throw new Error("failed to flip due to 3-neighbor");
+
+            halfedge_mesh_edge_flip(mesh, he, false);
             he.flag1 = true;
             he.twin.flag1 = true;
         }

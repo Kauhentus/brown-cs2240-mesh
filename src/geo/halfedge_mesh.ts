@@ -26,18 +26,14 @@ export class HalfedgeMesh {
         this.verts = verts;
     }
 
-    set_edges(edges: Edge[]){
-        this.edges = edges;
-    }
-
     set_faces(faces: Face[]){
         this.faces = faces;
     }
 
     cull_old_elements(){
         this.faces = this.faces.filter(f => !f.to_delete);
-        this.edges = this.edges.filter(e => !e.to_delete);
         this.halfedges = this.halfedges.filter(he => !he.to_delete);
+        this.verts = this.verts.filter(v => !v.to_delete);
     }
 
     reset_halfedge_flags_n(n: number){

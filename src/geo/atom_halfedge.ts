@@ -17,6 +17,11 @@ export class Halfedge {
     flag3: boolean = false;
     flag4: boolean = false;
 
+    cache1: any;
+    cache2: any;
+    cache3: any;
+    cache4: any;
+
     constructor(v: Vertex){
         this.vert = v;
         this.to_delete = false;
@@ -47,5 +52,12 @@ export class Halfedge {
         this.flag2 = false;
         this.flag3 = false;
         this.flag4 = false;
+    }
+
+    reset_cache(){
+        this.cache1 = undefined;
+        this.cache2 = undefined;
+        this.cache3 = undefined;
+        this.cache4 = undefined;
     }
 }

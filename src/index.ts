@@ -6,22 +6,30 @@ import { indexed_triangle_to_halfedge_mesh } from "./geo/halfedge_mesh_from_inde
 import { Vertex } from "./geo/atom_vertex";
 import { halfedge_mesh_to_index_triangle } from "./geo/halfedge_mesh_to_index_triangle";
 import { view_index_triangle, view_index_triangle_wireframe } from "./vis/view_indexed_triangle";
-import { halfedge_mesh_flip_edge } from "./geo/halfedge_mesh_flip_edge";
-import { halfedge_mesh_edge_split } from "./geo/halfedge_mesh_split_edge";
+import { halfedge_mesh_edge_flip } from "./geo/halfedge_mesh_edge_flip";
+import { halfedge_mesh_edge_split } from "./geo/halfedge_mesh_edge_split";
 import { view_halfedge } from "./vis/view_halfedge";
 import { Halfedge } from "./geo/atom_halfedge";
-import { vertex_get_neighbors } from "./geo/halfedge_mesh_get_vert_neighbors";
+import { vertex_get_neighbors } from "./geo/vertex_get_neighbors";
 import { view_vertex } from "./vis/view_vertex";
 import { cycle_list_reverse } from "./util/array";
 import { add_vs, smul_v } from "./geo/linalg_standard";
 import { loop_subdivision } from "./geo/halfedge_mesh_loop_subdivision";
 import { get_elapsed_time, reset_elapsed_time } from "./util/timer";
 import { halfedge_mesh_validate } from "./geo/halfedge_mesh_validate";
+import { halfedge_mesh_edge_collapse } from "./geo/halfedge_mesh_edge_collapse";
+import { decimate } from "./geo/halfedge_mesh_decimate";
+import { halfedge_mesh_add_noise } from "./geo/halfedge_mesh_add_noise";
+import { halfedge_mesh_denoise } from "./geo/halfedge_mesh_denoise";
+import { halfedge_mesh_remesh } from "./geo/halfedge_mesh_remesh";
 
 init_three();
 
 // load_file('/template_inis/final/subdivide_icosahedron_4.ini').then(async (ini_raw_data) => {
-load_file('/template_inis/final/simplify_cow.ini').then(async (ini_raw_data) => {
+// load_file('/template_inis/final/simplify_cow.ini').then(async (ini_raw_data) => {
+// load_file('/template_inis/final/simplify_sphere_full.ini').then(async (ini_raw_data) => {
+// load_file('/template_inis/final/filter_peter.ini').then(async (ini_raw_data) => {
+    load_file('/template_inis/final/remesh_peter.ini').then(async (ini_raw_data) => {
     reset_elapsed_time();
     const ini_file = parse_ini_file(ini_raw_data);
     const data = ini_file_to_ini_scene(ini_file);
@@ -31,10 +39,52 @@ load_file('/template_inis/final/simplify_cow.ini').then(async (ini_raw_data) => 
     const mesh = indexed_triangle_to_halfedge_mesh(obj_data.vertices, obj_data.indices);
     console.log(`Loaded 3D model in ${get_elapsed_time()} ms`);
 
-    // halfedge_mesh_flip_edge(mesh, mesh.halfedges[0]);
-    // halfedge_mesh_edge_split(mesh, mesh.halfedges[0]);
+    if(true){
+        if(data.Method.method === 'simplify'){
+            decimate(mesh, mesh.faces.length - data.Parameters.args1);
+        }
 
-    loop_subdivision(mesh, 1);
+        else if(data.Method.method === 'subdivide'){
+            loop_subdivision(mesh, data.Parameters.args1);
+        }
+
+        else if(data.Method.method === 'filter'){
+            let f = data.Parameters.args1;
+            halfedge_mesh_denoise(mesh, 0.5 * f, 0.25 * f, 0.1 * f)
+        }
+
+        else if(data.Method.method === 'remesh'){
+            halfedge_mesh_remesh(mesh, data.Parameters.args1, 0.5);
+        }
+    } 
+    
+    else {
+
+    } 
+
+    // halfedge_mesh_edge_flip(mesh, mesh.halfedges[0], false);   
+    // mesh.cull_old_elements();
+    // mesh.reset_halfedge_flags(); 
+    // halfedge_mesh_edge_split(mesh, mesh.halfedges[0]);
+    // mesh.cull_old_elements();
+    // mesh.reset_halfedge_flags();
+    // halfedge_mesh_edge_collapse(mesh, mesh.halfedges[0], false);
+    // mesh.cull_old_elements();
+    // mesh.reset_halfedge_flags();
+
+    // decimate(mesh, 5802 - 5204);
+    // loop_subdivision(mesh, 2);
+    // decimate(mesh, 4);
+
+    // loop_subdivision(mesh, 1);
+    // halfedge_mesh_add_noise(mesh, 0.1);
+    // halfedge_mesh_add_noise(mesh, 0.1 * 2);
+    // halfedge_mesh_denoise(mesh, 0.5 * 2, 0.25 * 2, 0.1 * 2);
+
+    // halfedge_mesh_remesh(mesh, 2, 0.5);
+
+    console.log("finished with", mesh.faces.length, "faces")
+
     console.log(`Processed in ${get_elapsed_time(true)} ms`);
 
     halfedge_mesh_validate(mesh);

@@ -9,6 +9,7 @@ export class Vertex {
 
     he!: Halfedge;
     id: symbol;
+    to_delete: boolean;
 
     flag1: boolean = false;
     flag2: boolean = false;
@@ -26,6 +27,7 @@ export class Vertex {
         if(z !== undefined) this.z = z;
 
         this.id = Symbol(c++);
+        this.to_delete = false;
     }
     
     set_pos(x: number, y: number, z: number){
@@ -42,10 +44,21 @@ export class Vertex {
         return [this.x, this.y, this.z];
     }
 
+    to_homogeneous(){
+        return [this.x, this.y, this.z, 1];
+    }
+
     reset_flags(){
         this.flag1 = false;
         this.flag2 = false;
         this.flag3 = false;
         this.flag4 = false;
+    }
+
+    reset_cache(){
+        this.cache1 = undefined;
+        this.cache2 = undefined;
+        this.cache3 = undefined;
+        this.cache4 = undefined;
     }
 }

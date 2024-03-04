@@ -2,25 +2,34 @@ import { Halfedge } from "./atom_halfedge";
 import { HalfedgeMesh } from "./halfedge_mesh";
 
 export const halfedge_mesh_validate = (mesh: HalfedgeMesh) => {
-    let test_results = [
-        every_halfedge_has_matching_twin(mesh),
-        every_triangle_has_3_edges(mesh),
-        num_halfedges_matches_num_faces(mesh),
-        can_march_around_triangle_pair(mesh),
+    let test_dictionary = [
+        every_halfedge_has_matching_twin,
+        every_triangle_has_3_edges,
+        num_halfedges_matches_num_faces,
+        can_march_around_triangle_pair,
 
-        no_old_vertices(mesh),
-        no_old_faces(mesh),
+        no_old_vertices,
+        no_old_faces,
 
-        every_halfedge_has_vertex(mesh),
-        every_vertex_has_halfedge(mesh),
-        every_halfedge_has_face(mesh),
-        every_face_has_halfedge(mesh),
+        every_halfedge_has_vertex,
+        every_vertex_has_halfedge,
+        every_halfedge_has_face,
+        every_face_has_halfedge,
 
-        flags_all_reset(mesh),
+        flags_all_reset,
     ];
-    let num_passing = test_results.filter(r => r).length;
+    
+    let test_results = test_dictionary.map(test => [test(mesh), test.name] as [boolean, string]);
+    let num_passing = test_results.filter(r => r[0]).length;
 
     console.log(`[${(num_passing / test_results.length * 100).toFixed(2)}%] ${num_passing} of ${test_results.length} tests passed`)
+    if(num_passing != test_results.length){
+        console.log(`Tests failed:`);
+        test_results.forEach(r => {
+            if(r[0]) return;
+            console.log(`  ${r[1]}`);
+        });
+    }
 }
 
 const flags_all_reset = (mesh: HalfedgeMesh): boolean => {

@@ -3,13 +3,28 @@ import { Edge } from "./atom_edge";
 import { Face } from "./atom_face";
 import { Halfedge } from "./atom_halfedge";
 import { HalfedgeMesh } from "./halfedge_mesh";
+import { vertex_get_neighbors } from "./vertex_get_neighbors";
 
 export type EdgeFlipEvent = {
+    failed: boolean,
     halfedges: Halfedge[];
     faces: Face[];
 }
 
-export const halfedge_mesh_flip_edge = (halfedge_mesh: HalfedgeMesh, he: Halfedge): EdgeFlipEvent => {
+export const halfedge_mesh_edge_flip = (halfedge_mesh: HalfedgeMesh, he: Halfedge, ignore_checks: boolean): EdgeFlipEvent => {
+    if(!ignore_checks){
+        let neighbors_A = vertex_get_neighbors(he.vert);
+        let neighbors_B = vertex_get_neighbors(he.next.vert);
+        let invalid_3_neighbor = neighbors_A.verts.length === 3 || neighbors_B.verts.length === 3;
+        if(invalid_3_neighbor){
+            return {
+                failed: true,
+                halfedges: [],
+                faces: []
+            }
+        }
+    }
+
     // get pointers
     let A = he;
     let B = he.twin;
@@ -62,6 +77,7 @@ export const halfedge_mesh_flip_edge = (halfedge_mesh: HalfedgeMesh, he: Halfedg
     B.vert.he = An;
 
     return {
+        failed: false,
         halfedges: [C, D],
         faces: [fc, fd]
     }

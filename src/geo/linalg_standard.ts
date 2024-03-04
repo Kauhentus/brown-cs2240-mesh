@@ -41,11 +41,11 @@ export const same_v = (a: Vertex, b: Vertex) => {
     return delta < 1e-4;
 }
 
-export const avg_v = (a: Vertex, b: Vertex) => {
+export const avg_v = (...vs: Vertex[]) => {
     return new Vertex(
-        (a.x + b.x) / 2,
-        (a.y + b.y) / 2,
-        (a.z + b.z) / 2,
+        vs.reduce((a, v) => a + v.x, 0) / vs.length,
+        vs.reduce((a, v) => a + v.y, 0) / vs.length,
+        vs.reduce((a, v) => a + v.z, 0) / vs.length,
     );
 }
 
@@ -80,6 +80,14 @@ export const normalize_v = (a: Vertex) => {
 
 export const dot_v = (a: Vertex, b: Vertex) => {
     return a.x*b.x + a.y*b.y + a.z*b.z;
+}
+
+export const dot_vec3 = (a: number[], b: number[]) => {
+    return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+}
+
+export const dot_vec4 = (a: number[], b: number[]) => {
+    return a[0]*b[0] + a[1]*b[1] + a[2]*b[2] + a[3]*b[3];
 }
 
 export const cross_v = (a: Vertex, b: Vertex) => {

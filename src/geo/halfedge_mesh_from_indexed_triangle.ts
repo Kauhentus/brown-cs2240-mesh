@@ -46,7 +46,6 @@ export const indexed_triangle_to_halfedge_mesh = (vertices: Vertex[], indices: n
 
     let halfedge_mesh = new HalfedgeMesh(halfedges);
     halfedge_mesh.verts = vertices;
-    halfedge_mesh.edges = edges;
     halfedge_mesh.faces = faces;
 
     return halfedge_mesh;
