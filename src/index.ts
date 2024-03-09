@@ -68,9 +68,14 @@ const initialize_UI = () => {
     const input_sigma_s = document.getElementById('sigma-s') as HTMLInputElement;
     const input_sigma_c = document.getElementById('sigma-c') as HTMLInputElement;
 
-    const change_og_triangle_num = (n: number) => {
+    const change_og_triangle_num = (n: number, highlight: boolean) => {
         const div = document.getElementById('og_tri_count');
-        if(div) div.innerHTML = `Original triangle count: ${n}`;
+        if(highlight){
+            if(div) div.innerHTML = `<font style="color: red;"><b>Original triangle count: ${n}</b></font>`;
+        }
+        else {
+            if(div) div.innerHTML = `Original triangle count: ${n}`;
+        }
     }
 
     const change_new_triangle_num = (n: number | string, highlight: boolean) => {
@@ -130,7 +135,6 @@ const initialize_UI = () => {
             const mesh = indexed_triangle_to_halfedge_mesh(obj_data.vertices, obj_data.indices);
             console.log(`Loaded 3D model in ${get_elapsed_time()} ms`);
 
-            change_og_triangle_num(mesh.faces.length)
             prev_objects.forEach(o => scene.remove(o));
             prev_objects = [];
             
@@ -142,6 +146,9 @@ const initialize_UI = () => {
             } else if(input_data.selected_operation === 'decimate'){
                 target_num *= input_data.decimation_ratio;
                 target_num_str *= input_data.decimation_ratio;
+
+                target_num = Math.round(target_num);
+                target_num_str = Math.round(target_num_str);
             } else if(input_data.selected_operation === 'remesh'){
                 target_num *= 1.5;
                 target_num_str = `~${target_num}`;
@@ -150,11 +157,14 @@ const initialize_UI = () => {
             if(input_data.selected_operation === 'decimate'){
                 let max_starting_triangles = 10000;
                 let valid = max_starting_triangles > mesh.faces.length;
-                change_new_triangle_num(target_num_str, !valid);
+                
+                change_og_triangle_num(mesh.faces.length, !valid);
+                change_new_triangle_num(target_num_str, target_num > threshold);
                 if(!valid){
                     return;
                 }
             } else {
+                change_og_triangle_num(mesh.faces.length, false)
                 change_new_triangle_num(target_num_str, target_num > threshold);
                 if(target_num > threshold){
                     return;
@@ -170,7 +180,7 @@ const initialize_UI = () => {
                     input_data.selected_file === "cow_noisy"
                 ){
                     camera.position.set(13 + 2, 9, -1);
-                    controls.target.set(12 + 2, 9, -1);
+                    controls.target.set(0, 9, -1);
                     controls.update();
                 } else if(
                     input_data.selected_file === "peter" ||

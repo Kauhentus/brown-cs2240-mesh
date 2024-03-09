@@ -6,7 +6,7 @@
     <body>
         <div class="overall-container">
             <div class="canvas-container">
-                <canvas width="600" height="650" id="main-canvas"></canvas>
+                <canvas width="600" height="650" id="main-canvas" style="background-color: white;"></canvas>
             </div>
             <div class="side-container">
                 <div class="top-A">
@@ -40,16 +40,16 @@
                     <br>
                     <div style="display: flex; flex-direction: row; margin-top: 0.3rem;">
                         <div class="label-col">
-                            <div class="line-item"><div>Subdivide</div></div>
+                            <div class="line-item"><div><b>Subdivide</b></div></div>
                             <div class="line-item"><div>- Subdivision levels</div></div>
-                            <div class="line-item"><div>Decimate</div></div>
+                            <div class="line-item"><div><b>Decimate</b> (max 20k tri)</div></div>
                             <div class="line-item"><div>- Decimation ratio</div></div>
-                            <div class="line-item"><div>Remesh</div></div>
+                            <div class="line-item"><div><b>Remesh</b></div></div>
                             <div class="line-item"><div>- Remeshing iterations</div></div>
-                            <div class="line-item"><div>Filter (WIP)</div></div>
+                            <div class="line-item"><div><b>Filter</b> (WIP)</div></div>
                             <div class="line-item"><div>- Rho (2*sigma_c)</div></div>
                             <div class="line-item"><div>- Variance</div></div>
-                            <div class="line-item"><div>None</div></div>
+                            <div class="line-item"><div><b>None</b></div></div>
                         </div>
                         <div class="input-col">
                             <div class="line-item"><input type="checkbox" id="checkbox-subdivide" checked></div>
