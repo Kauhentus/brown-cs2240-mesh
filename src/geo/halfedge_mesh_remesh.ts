@@ -5,6 +5,8 @@ import { halfedge_mesh_edge_split } from "./halfedge_mesh_edge_split";
 import { vertex_get_neighbors } from "./vertex_get_neighbors";
 import { vertex_get_normal } from "./vertex_get_normal";
 import { add_v, avg_v, distance_v, dot_v, smul_v, sub_v } from "./linalg_standard";
+import { view_vertex } from "../vis/view_vertex";
+import { Vertex } from "./atom_vertex";
 
 export const halfedge_mesh_remesh = (mesh: HalfedgeMesh, iterations: number, w: number) => {
     if(iterations === 0) return;
@@ -46,7 +48,7 @@ const halfedge_mesh_remesh_helper = (mesh: HalfedgeMesh, w: number) => {
         let A = he.vert, B = he.twin.vert;
         let length = distance_v(A, B);
         
-        if(length < 4/5 * mean_edge_length){ // should be 4/5
+        if(length < 3.5/5 * mean_edge_length){ // should be 4/5
             let event = halfedge_mesh_edge_collapse(mesh, he, false);
             he.flag1 = true;
             he.twin.flag1 = true;
@@ -86,13 +88,13 @@ const halfedge_mesh_remesh_helper = (mesh: HalfedgeMesh, w: number) => {
     mesh.cull_old_elements();
     mesh.reset_halfedge_flags();
 
-    // stage 4: RECENTER
+    // stage 4: RECENTER\
     mesh.verts.forEach(v => {
         let normal = vertex_get_normal(v, true);
         let neighborhood = vertex_get_neighbors(v);
         let centroid = avg_v(...neighborhood.verts);
         let diff = sub_v(centroid, v);
-        let diff_tangent = sub_v(diff, smul_v(normal, dot_v(normal, diff)));
+        let diff_tangent = sub_v(diff, smul_v(smul_v(normal, dot_v(normal, diff)), 1));
         let new_pos = add_v(v, smul_v(diff_tangent, w));
         v.cache1 = new_pos;
     });

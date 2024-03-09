@@ -29,6 +29,10 @@ export class Vertex {
         this.id = Symbol(c++);
         this.to_delete = false;
     }
+
+    clone(){
+        return new Vertex(this.x, this.y, this.z);
+    }
     
     set_pos(x: number, y: number, z: number){
         this.x = x;

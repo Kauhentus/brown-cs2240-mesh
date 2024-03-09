@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <link href="./web/style.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="overall-container">
+            <div class="canvas-container">
+                <canvas width="600" height="650" id="main-canvas"></canvas>
+            </div>
+            <div class="side-container">
+                <div class="top-A">
+                    <h1>Geometry Processing</h1>
+                    <div class="text">
+                        Basic geometry processing implemented in Javascript.
+                        Supports mesh subdivide, decimate, remesh, and filter operations.
+                        Try playing with the params below (maximum 100k triangles supported)! Created in Brown CS 2240.
+                    </div>
+                </div>
+
+                <div class="top-B">
+                    <div style="display: flex; flex-direction: column; margin-bottom: 0.5rem;">
+                        <div style="margin-bottom: 4px;">OBJ File</div>
+                        <select id="file-selector" name="file-selector">
+                            <option value="cow">Cow</option>
+                            <option value="cow_noisy">Cow Noisy</option>
+                            <option value="icosahedron">Icosahedron</option>
+                            <option value="moomoo">Moomoo</option>
+                            <option value="peter">Peter</option>
+                            <option value="peter_noisy">Peter Noisy</option>
+                            <option value="teapot">Teapot</option>
+                        </select>
+                    </div>
+                    <hr style="width: 100%;">
+                    <br>
+                    <div class="line-item" id="sample-counter" style="align-items: center;">
+                        <div id="og_tri_count">Original triangle count: 1000</div>
+                        <div id="new_tri_count">Triangle count after operation: 1000</div>
+                    </div>
+                    <br>
+                    <div style="display: flex; flex-direction: row; margin-top: 0.3rem;">
+                        <div class="label-col">
+                            <div class="line-item"><div>Subdivide</div></div>
+                            <div class="line-item"><div>- Subdivision levels</div></div>
+                            <div class="line-item"><div>Decimate</div></div>
+                            <div class="line-item"><div>- Decimation ratio</div></div>
+                            <div class="line-item"><div>Remesh</div></div>
+                            <div class="line-item"><div>- Remeshing iterations</div></div>
+                            <div class="line-item"><div>Filter (WIP)</div></div>
+                            <div class="line-item"><div>- Rho (2*sigma_c)</div></div>
+                            <div class="line-item"><div>- Variance</div></div>
+                            <div class="line-item"><div>None</div></div>
+                        </div>
+                        <div class="input-col">
+                            <div class="line-item"><input type="checkbox" id="checkbox-subdivide" checked></div>
+                            <div class="line-item"><input type="number" id="num-subdivision-levels" name="num-subdivision-levels" min="0" max="6" step="1" value="1"></div>
+                            <div class="line-item"><input type="checkbox" id="checkbox-decimate"></div>
+                            <div class="line-item"><input type="number" id="decimation-ratio" name="decimation-ratio" min="0.01" max="1" step="0.1" value="0.5"></div>
+                            <div class="line-item"><input type="checkbox" id="checkbox-remesh"></div>
+                            <div class="line-item"><input type="number" id="num-remesh-levels" name="num-remesh-levels" min="0" max="6" step="1" value="1"></div>
+                            <div class="line-item"><input type="checkbox" id="checkbox-filter"></div>
+                            <div class="line-item"><input type="number" id="sigma-s" name="sigma-s" min="0" max="5" step="0.1" value="2.0"></div>
+                            <div class="line-item"><input type="number" id="sigma-c" name="sigma-c" min="0" max="5" step="0.1" value="0.1"></div>
+                            <div class="line-item"><input type="checkbox" id="checkbox-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="bundle.js"></script>
+    </body>
+</html>

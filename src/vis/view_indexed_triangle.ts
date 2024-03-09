@@ -17,7 +17,10 @@ export const view_index_triangle = (data: OBJData, color: number) => {
 
     scene.add(mesh);
 
-    view_index_triangle_wireframe(data, 0xffaa00);
+    let wireframe_objects = view_index_triangle_wireframe(data, 0xffaa00);
+    return {
+        objects: [...wireframe_objects.objects, mesh]
+    }
 }
 
 export const view_index_triangle_wireframe = (data: OBJData, color: number) => {
@@ -39,4 +42,8 @@ export const view_index_triangle_wireframe = (data: OBJData, color: number) => {
     geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
     const lines = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({color: color}));
     scene.add(lines);
+
+    return {
+        objects: [lines]
+    }
 }
